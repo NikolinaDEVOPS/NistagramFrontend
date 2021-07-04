@@ -1,8 +1,9 @@
 <template>
   <div class="submit-form mt-3 mx-auto">
-    <p class="headline">Add Account</p>
+    <h2>Account</h2>
 
-    <div v-if="!submitted">
+    <div class="mt-8">
+      <h4>Update profile informations</h4>
       <v-form ref="form" lazy-validation>
         <v-text-field
           v-model="account.username"
@@ -63,15 +64,14 @@
 
       </v-form>
 
-      <v-btn color="primary" class="mt-3" @click="save">Submit</v-btn>
-    </div>
+      <v-btn color="primary" class="mt-3 mb-5" @click="save">Update</v-btn>
+      <h4>Profile privacy</h4>
 
-    <div v-else>
-      <v-card class="mx-auto">
-        <v-card-title>
-          Submitted successfully!
-        </v-card-title>
-      </v-card>
+      <v-btn color="primary" class="mt-3 mb-5" @click="updatePrivacy">{{ account.isPublic ? "Set Private"  : "Set Public "}} </v-btn>
+
+      <v-alert type="success" v-if="submitted">
+        Profile updated.
+      </v-alert>
     </div>
   </div>
 </template>
@@ -80,10 +80,11 @@
 import UserService from "../../services/UserService";
 
 export default {
-  name: "add-tutorial",
+  name: "edit-account",
   data() {
     return {
       account: {
+        userId: "",
         username : "",
         name : "",
         surname : "",
@@ -99,8 +100,7 @@ export default {
   },
   methods: {
     save() {
-
-      UserService.save(this.account)
+      UserService.update(this.account.username, this.account)
         .then((response) => {
           console.log(response.data);
           this.submitted = true;
@@ -109,11 +109,50 @@ export default {
           console.log(e);
         });
     },
+    getAccount(id) {
+      console.log(11)
+      UserService.get(id)
+        .then((response) => {
+          this.account = response.data;
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    updatePrivacy() {
+      if (this.account.isPublic) {
+        this.account.isPublic = false;
 
+        UserService.setPrivate(this.account.username)
+        .then((response) => {
+          console.log(response.data);
+          this.submitted = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+        return;
+      }
+      this.account.isPublic = true;
+
+      UserService.setPublic(this.account.username)
+        .then((response) => {
+          console.log(response.data);
+          this.submitted = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     refresh() {
       this.submitted = false;
       this.account = {};
     },
+  },
+  mounted() {
+    this.message = "";
+    this.getAccount(this.$route.params.id);
   },
 };
 </script>
