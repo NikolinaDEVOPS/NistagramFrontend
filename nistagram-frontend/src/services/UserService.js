@@ -27,7 +27,9 @@ class UserService {
   getFollowing(username) {
     return http.get(`/${username}/following`);
   }
-
+  getFavorites(username) {
+    return http.get(`/${username}/favorites`);
+  }
   checkUserFollows(username, userToFollow) {
     return http.get(`/${username}/checkFollows/${userToFollow}`);
   }
@@ -47,7 +49,9 @@ class UserService {
   follow(username, toFollow) {
     return http.post(`/${username}/follow//${toFollow}`);
   }
-
+  favourites(username, postId) {
+    return http.post(`/${username}/favorites/${postId}`);
+  }
   accept(username, toFollow) {
     return http.post(`/${username}/accept//${toFollow}`);
   }
