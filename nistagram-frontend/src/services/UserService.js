@@ -5,6 +5,9 @@ class UserService {
     return http.post("/", user);
   }
 
+  update(username, user) {
+    return http.put(`/${username}`, user);
+  }
   get(username) {
     return http.get(`/${username}`);
   }
@@ -23,6 +26,10 @@ class UserService {
 
   getFollowing(username) {
     return http.get(`/${username}/following`);
+  }
+
+  checkUserFollows(username, userToFollow) {
+    return http.get(`/${username}/checkFollows/${userToFollow}`);
   }
 
   getRequests(username) {
