@@ -40,7 +40,8 @@ export default new Router({
       path: "/post/add",
       name: "add-post",
       component: () => import("./components/post/AddPost.vue")
-    },{
+    }
+    ,{
       path: "/post/:id",
       name: "post-details",
       component: () => import("./components/post/PostDetails.vue")
@@ -49,6 +50,21 @@ export default new Router({
       path: "/search",
       name: "search-account",
       component: () => import("./components/account/Search.vue")
+    },
+    {
+      path: "/campaign/add",
+      name: "add-campaign",
+      component: () => import("./components/campaign/AddCampaign.vue")
+    },
+    {
+      path: "/campaign/:id",
+      name: "campaign-details",
+      component: () => import("./components/campaign/CampaignDetails.vue")
+    },
+    {
+      path: "/campaigns",
+      name: "campaigns-details",
+      component: () => import("./components/campaign/MyCampaigns.vue")
     },
   ]
 });
