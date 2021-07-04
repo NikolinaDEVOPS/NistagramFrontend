@@ -36,18 +36,25 @@
         <h3>This account is private.</h3>
         <small>Follow this account to see their photos.</small>
       </v-col>
+      <v-col v-else>
+        <post-list :posts="posts"></post-list>
+      </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
 import UserService from "../../services/UserService";
+import PostService from "../../services/PostService";
+import PostList from '../post/PostList.vue';
 
 export default {
+  components: { PostList },
   name: "AccountDetails",
   data() {
     return {
       account: null,
+      posts: null,
       followers: [],
       following: [],
       userFollow: false,
@@ -59,6 +66,8 @@ export default {
       UserService.get(id)
         .then((response) => {
           this.account = response.data;
+          if (this.account.isPublic) this.getPosts(id);
+
           console.log(response.data);
         })
         .catch((e) => {
@@ -91,6 +100,7 @@ export default {
       UserService.checkUserFollows("main", id)
         .then((response) => {
           this.userFollow = response.data;
+          if (this.userFollow && !this.account.isPublic) this.getPosts(id);
           console.log("CHECK", this.userFollow);
         })
         .catch((e) => {
@@ -106,13 +116,23 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    getPosts(username) {
+      PostService.findByUsername(username)
+        .then((response) => {
+          this.posts = response.data;
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     }
   },
   mounted() {
     this.message = "";
     this.getAccount(this.$route.params.id);
     this.checkUserFollows(this.$route.params.id);
-  },
+  }
 };
 </script>
 

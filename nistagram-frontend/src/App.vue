@@ -5,8 +5,8 @@
         NISTA<span style="color: #F44336">GRAM</span>
       </div>
 
-      <v-btn to="/add" text>
-        Add
+      <v-btn to="/search" text>
+        Search
       </v-btn>
     </v-app-bar>
 
