@@ -37,6 +37,11 @@
         <small>Follow this account to see their photos.</small>
       </v-col>
       <v-col v-else>
+        <div v-if="campaigns.length">
+          <h4>CAMPAIGNS</h4>
+          <campaign-list :posts="campaigns"></campaign-list>
+          <hr>
+        </div>
         <post-list :posts="posts"></post-list>
       </v-col>
     </v-row>
@@ -46,10 +51,13 @@
 <script>
 import UserService from "../../services/UserService";
 import PostService from "../../services/PostService";
+import CampaignService from "../../services/CampaignService";
+
 import PostList from '../post/PostList.vue';
+import CampaignList from '../campaign/CampaignList.vue';
 
 export default {
-  components: { PostList },
+  components: { PostList, CampaignList },
   name: "AccountDetails",
   data() {
     return {
@@ -59,6 +67,7 @@ export default {
       following: [],
       userFollow: false,
       message: "",
+      campaigns: []
     };
   },
   methods: {
@@ -126,12 +135,23 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    getCampaign(username) {
+      CampaignService.findByUsername(username)
+        .then((response) => {
+          this.campaigns = response.data;
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     }
   },
   mounted() {
     this.message = "";
     this.getAccount(this.$route.params.id);
     this.checkUserFollows(this.$route.params.id);
+    this.getCampaign(this.$route.params.id)
   }
 };
 </script>
