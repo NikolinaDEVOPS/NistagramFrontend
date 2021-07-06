@@ -66,5 +66,15 @@ export default new Router({
       name: "campaigns-details",
       component: () => import("./components/campaign/MyCampaigns.vue")
     },
+    {
+      path: "/agent/add",
+      name: "add-agent",
+      component: () => import("./components/agent/AddAgent.vue")
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: () => import("./components/agent/AgentList.vue")
+    },
   ]
 });
